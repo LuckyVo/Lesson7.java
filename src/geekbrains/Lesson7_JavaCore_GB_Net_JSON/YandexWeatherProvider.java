@@ -18,35 +18,37 @@ public class YandexWeatherProvider implements WeatherProvider {
     static Properties prop = new Properties();
     OkHttpClient client = new OkHttpClient();
     ObjectMapper objectMapper = new ObjectMapper();
-
+    ReverseGeocode reverseGeocode = new ReverseGeocode();
 
     @Override
     public void getWeather(Periods periods) throws IOException {
         loadProperties();
-        String globalLat = ApplicationGlobalLatLon.getInstance().getLatCity();
-        String globalLon = ApplicationGlobalLatLon.getInstance().getLonCity();
+        String[] valueLatLon = reverseGeocode.getCity();
+        String latValue = valueLatLon[0];
+        String lonValue = valueLatLon[1];
+
         String limit = WeatherLimit.getInstance().getWeatherLimit();
 
         if (periods.equals(Periods.CUSTOM)) {
-            HttpUrl url = new HttpUrl.Builder()
+            HttpUrl yandexWeatherForecast = new HttpUrl.Builder()
                 .scheme("https")
-                .host(prop.getProperty("BASE_HOST"))
-                .addPathSegment(prop.getProperty("API_VERSION"))
-                .addPathSegment(prop.getProperty("FORECAST"))
-                .addQueryParameter("lat", globalLat)
-                .addQueryParameter("lon", globalLon)
-                .addQueryParameter("lang", prop.getProperty("LANG"))
+                .host(prop.getProperty("BASE_HOST_YANDEX"))
+                .addPathSegment(prop.getProperty("API_VERSION_YANDEX"))
+                .addPathSegment(prop.getProperty("FORECAST_YANDEX"))
+                .addQueryParameter("lat", latValue)
+                .addQueryParameter("lon", lonValue)
+                .addQueryParameter("lang", prop.getProperty("LANG_YANDEX"))
                 .addQueryParameter("limit", limit)
-                .addQueryParameter("hours", prop.getProperty("HOURS"))
-                .addQueryParameter("extra", prop.getProperty("EXTRA"))
+                .addQueryParameter("hours", prop.getProperty("HOURS_YANDEX"))
+                .addQueryParameter("extra", prop.getProperty("EXTRA_YANDEX"))
                 .build();
 
-            System.out.println(url);
+            System.out.println(yandexWeatherForecast);
 
             Request requestToYandexAPI = new Request.Builder()
                 .addHeader("accept", "application/json")
-                .addHeader("X-Yandex-API-Key", prop.getProperty("API_KEY"))
-                .url(url)
+                .addHeader("X-Yandex-API-Key", prop.getProperty("YANDEX_API_KEY"))
+                .url(yandexWeatherForecast)
                 .get()
                 .build();
 
@@ -54,7 +56,6 @@ public class YandexWeatherProvider implements WeatherProvider {
             System.out.println(jsonResponse);
             StringReader yandexWeatherJSON = new StringReader(jsonResponse);
             WeatherResponse weatherResponse = objectMapper.readValue(yandexWeatherJSON, WeatherResponse.class);
-
 
 //            ВОТ ЭТОТ СПОСОБ ПО ПОЛУЧЕНИЮ ДАННЫХ ИЗ JSON РАБОТАЕТ.
 //            ЭТО ССЫЛКА НА ДОКУМЕНТАЦИЮ ЯНДЕКС
@@ -94,8 +95,6 @@ public class YandexWeatherProvider implements WeatherProvider {
 //            System.out.println("Ожидается: " + conditionWeather.getInitializationCondition());
 
 
-
-
             System.out.println("C сериализацией");
 //            try {
 //                  В ДАННОМ МЕТОДЕ ОН НА ТОТ ЖЕ ПАРАМЕТР ВОЗАРАЩАЕТ NULL,
@@ -105,7 +104,6 @@ public class YandexWeatherProvider implements WeatherProvider {
 //            } catch (NullPointerException e){
 //                throw new IOException("Значение города нулевое! Стоит разобраться!");
 //            }
-
 
             for (Forecast forecast : weatherResponse.getForecasts()) {
                     System.out.println("На дату: " + forecast.getDate() +

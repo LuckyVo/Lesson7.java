@@ -5,22 +5,16 @@ import java.util.*;
 
 public class UserInterface {
 
-    private static UserInterface INSTANCE;
     private Controller controller = new Controller();
-    private ApplicationGlobalLatLon applicationGlobalLatLon = new ApplicationGlobalLatLon();
+    private ApplicationGlobalCity applicationGlobalCity = new ApplicationGlobalCity();
 
     public void runApplication(){
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-
-            System.out.println("Введите широту (пример: 59.950186):");
-            String lat = scanner.nextLine();
-            setLatCity(lat);
-
-            System.out.println("Введите долготу (пример: 30.314271):");
-            String lon = scanner.nextLine();
-            setLonCity(lon);
+            System.out.println("Введите название города на английском языке:");
+            String city = scanner.nextLine();
+            setCity(city);
 
             System.out.println("Введите введите на сколько дней вывести прогноз погоды(максимальная длина 7 дней). " +
                     "\nДля завершения работы введите - выход/exit:");
@@ -51,12 +45,8 @@ public class UserInterface {
         }
     }
 
-    private void setLatCity(String lat) {
-        applicationGlobalLatLon.getInstance().setLatCity(lat);
-    }
-
-    private void setLonCity(String lon) {
-        applicationGlobalLatLon.getInstance().setLonCity(lon);
+    private void setCity(String city) {
+        applicationGlobalCity.getInstance().setSelectedCity(city);
     }
 
     private void validateUserInput(String userInput) throws IOException {
@@ -77,7 +67,4 @@ public class UserInterface {
     }
 
     public void setLimit(String limit) { WeatherLimit.getInstance().setWeatherLimit(limit); }
-
-
-
 }
