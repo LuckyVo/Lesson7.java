@@ -1,13 +1,19 @@
 package geekbrains.YandexWeather;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Geo_Object {
+    @JsonProperty("district")
     private Country district;
+    @JsonProperty("locality")
     private Country locality;
+    @JsonProperty("province")
     private Country province;
+    @JsonProperty("country")
     private Country country;
 
     public Country getDistrict() { return district; }

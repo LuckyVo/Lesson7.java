@@ -57,60 +57,22 @@ public class YandexWeatherProvider implements WeatherProvider {
             StringReader yandexWeatherJSON = new StringReader(jsonResponse);
             WeatherResponse weatherResponse = objectMapper.readValue(yandexWeatherJSON, WeatherResponse.class);
 
-//            ВОТ ЭТОТ СПОСОБ ПО ПОЛУЧЕНИЮ ДАННЫХ ИЗ JSON РАБОТАЕТ.
 //            ЭТО ССЫЛКА НА ДОКУМЕНТАЦИЮ ЯНДЕКС
 //            https://yandex.ru/dev/weather/doc/dg/concepts/forecast-test.html#req-example
 
-//            String country = objectMapper
-//                    .readTree(jsonResponse)
-//                    .at("/geo_object/country/name")
-//                    .asText();
-//
-//            String locality = objectMapper
-//                    .readTree(jsonResponse)
-//                    .at("/geo_object/locality/name")
-//                    .asText();
-//
-//            String data = objectMapper
-//                    .readTree(jsonResponse)
-//                    .at("/forecasts/date")
-//                    .asText();
-//
-//            String fact = objectMapper
-//                    .readTree(jsonResponse)
-//                    .at("/fact/temp")
-//                    .asText();
-//
-//            String condition = objectMapper
-//                    .readTree(jsonResponse)
-//                    .at("/fact/condition")
-//                    .asText();
-//            Condition.setCondition(condition);
-//
-//            System.out.println("Без десериализации");
-//            System.out.println("Данные координаты соответсвуют стране: " + country);
-//            System.out.println("Данные координаты указывают место положение: " + locality);
-//            System.out.println("Прогноз на дату: " + data);
-//            System.out.println("Средняя температура: " + fact);
-//            System.out.println("Ожидается: " + conditionWeather.getInitializationCondition());
 
-
-            System.out.println("C сериализацией");
-//            try {
-//                  В ДАННОМ МЕТОДЕ ОН НА ТОТ ЖЕ ПАРАМЕТР ВОЗАРАЩАЕТ NULL,
-//                  БЕЗ СЕРИАЛИЗАЦИИ ВОЗВРАЩАЕТ ПАРАМЕТР ЗАКОМЕНТИРОВАНО ВЫШЕ
-//                String loclity = weatherResponse.getGeoObject().getLocality().getName();
-//                System.out.println("В городе " + loclity + " ожидается: ");
-//            } catch (NullPointerException e){
-//                throw new IOException("Значение города нулевое! Стоит разобраться!");
-//            }
+            try {
+                String loclity = weatherResponse.getGeoObject().getLocality().getName();
+                System.out.println("В городе " + loclity + " ожидается: ");
+            } catch (NullPointerException e){
+                throw new IOException("Значение города нулевое! Стоит разобраться!");
+            }
 
             for (Forecast forecast : weatherResponse.getForecasts()) {
                     System.out.println("На дату: " + forecast.getDate() +
-//                            ПОСТОЯННО ВОЗРАЩАЕТ НУЛЕВОЕ ЗНАЧЕНИЕ ПОГОДЫ И НЕ ВЫВОДИТ УСЛОВИЯ
-                            "\nДнём погодные условия будут: " + forecast.getParts().getDay().getCondition() +
+                            "\nДнём погодные условия будут: " + forecast.getParts().getDay().getCondition().getCondition() +
                             ", температура: " + forecast.getParts().getDay().getTempAvg() + "С." +
-                            "\nНочью погодные условия будут: " + forecast.getParts().getNight().getCondition() +
+                            "\nНочью погодные условия будут: " + forecast.getParts().getNight().getCondition().getCondition() +
                             ", температура: " + forecast.getParts().getNight().getTempAvg() + "С.");
                 }
 

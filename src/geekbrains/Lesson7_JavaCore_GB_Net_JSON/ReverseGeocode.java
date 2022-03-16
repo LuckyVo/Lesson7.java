@@ -51,14 +51,15 @@ public class ReverseGeocode {
 
         String jsonResponse = Objects.requireNonNull(response.body().string());
         System.out.println(jsonResponse);
-        System.out.println("Произвожу поиск города: " + selectedCity);
+        System.out.println("Произвожу поиск города: " + selectedCity + ".");
 
-//        if (objectMapper.readTree(jsonResponse).size() > 0) {
-            JsonNode lat = objectMapper.readTree(jsonResponse).at("/results/locations/latLng/lat");
-            JsonNode lon = objectMapper.readTree(jsonResponse).at("/results/locations/latLng/lng");
-            System.out.println("Город " + selectedCity + " найден на широте " + lat.asText() + " и долготе " + lon.asText());
+        if (objectMapper.readTree(jsonResponse).size() > 0) {
+            JsonNode lat = objectMapper.readTree(jsonResponse).at("/results/0/locations/0/latLng/lat");
+            JsonNode lon = objectMapper.readTree(jsonResponse).at("/results/0/locations/0/latLng/lng");
+            System.out.println("Город " + selectedCity + " найден на широте: " + lat.asText() +
+                    ", и долготе: " + lon.asText() + ".");
             return new String[]{String.valueOf(lat),String.valueOf(lon)};
-//        } else throw new IOException("Server returns 0 cities");
+        } else throw new IOException("Server returns 0 cities");
 
 
 //        if (objectMapper.readTree(jsonResponse).size() > 0) {

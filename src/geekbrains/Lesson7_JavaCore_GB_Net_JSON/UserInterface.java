@@ -16,7 +16,7 @@ public class UserInterface {
             String city = scanner.nextLine();
             setCity(city);
 
-            System.out.println("Введите введите на сколько дней вывести прогноз погоды(максимальная длина 7 дней). " +
+            System.out.println("Введите на сколько дней вывести прогноз погоды (максимальная длина 7 дней). " +
                     "\nДля завершения работы введите - выход/exit:");
             String limit = scanner.nextLine();
             setLimit(limit);

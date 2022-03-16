@@ -2,12 +2,15 @@ package geekbrains.YandexWeather;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Day {
+    @JsonProperty("temp_avg")
     private Integer tempAvg;
     private WindDir windDir;
+    @JsonProperty("condition")
     private Condition condition;
 
     public Integer getTempAvg() { return tempAvg; }

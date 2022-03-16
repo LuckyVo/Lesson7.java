@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Locality {
+    @JsonProperty("id")
     private long id;
+    @JsonProperty("name")
     private String name;
 
     public long getID() { return id; }
